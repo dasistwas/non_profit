@@ -279,7 +279,9 @@ def trigger_razorpay_subscription(*args, **kwargs):
 
 	except Exception as e:
 		message = "{0}\n\n{1}\n\n{2}: {3}".format(e, frappe.get_traceback(), _("Payment ID"), payment.id)
-		log = frappe.log_error(message, _("Error creating membership entry for {0}").format(member.name))
+		log = frappe.log_error(
+			title=_("Error creating membership entry for {0}").format(member.name), message=message
+		)
 		notify_failure(log)
 		return {"status": "Failed", "reason": e}
 
@@ -322,7 +324,9 @@ def update_halted_razorpay_subscription(*args, **kwargs):
 
 	except Exception as e:
 		message = "{0}\n\n{1}".format(e, frappe.get_traceback())
-		log = frappe.log_error(message, _("Error updating halted status for member {0}").format(member.name))
+		log = frappe.log_error(
+			title=_("Error updating halted status for member {0}").format(member.name), message=message
+		)
 		notify_failure(log)
 		return {"status": "Failed", "reason": e}
 
@@ -333,7 +337,7 @@ def process_request_data(data):
 	try:
 		verify_signature(data)
 	except Exception as e:
-		log = frappe.log_error(e, "Membership Webhook Verification Error")
+		log = frappe.log_error(title="Membership Webhook Verification Error")
 		notify_failure(log)
 		return {"status": "Failed", "reason": e}
 
@@ -402,16 +406,16 @@ def get_plan_from_razorpay_id(plan_id):
 
 
 def set_expired_status():
-	frappe.db.sql("""
-		UPDATE
-			`tabMembership` SET `status` = 'Expired'
-		WHERE
-			`status` not in ('Cancelled') AND `to_date` < %s
-		""", (nowdate()))
+	membership = frappe.qb.DocType("Membership")
+	(
+		frappe.qb.update(membership)
+		.set(membership.membership_status, "Expired")
+		.where(membership.membership_status.notin(["Cancelled", "Expired"]))
+		.where(membership.to_date < nowdate())
+	).run()
 
 
 def get_last_membership(member):
-	print(member)
 	'''Returns last membership if exists'''
 	last_membership = frappe.get_all('Membership', 'name,to_date,membership_type',
 		dict(member=member, paid=1), order_by='to_date desc', limit=1)

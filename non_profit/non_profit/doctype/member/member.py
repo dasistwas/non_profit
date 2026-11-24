@@ -30,8 +30,8 @@ class Member(Document):
 	def setup_subscription(self):
 		non_profit_settings = frappe.get_doc('Non Profit Settings')
 		if not non_profit_settings.enable_razorpay_for_memberships:
-			frappe.throw(_('Please check Enable Razorpay for Memberships in {0} to setup subscription')).format(
-				get_link_to_form('Non Profit Settings', 'Non Profit Settings'))
+			frappe.throw(_('Please check Enable Razorpay for Memberships in {0} to setup subscription').format(
+				get_link_to_form('Non Profit Settings', 'Non Profit Settings')))
 
 		controller = get_payment_gateway_controller("Razorpay")
 		settings = controller.get_settings({})
@@ -72,9 +72,9 @@ class Member(Document):
 
 
 def get_or_create_member(user_details):
-	member_list = frappe.get_all("Member", filters={'email': user_details.email, 'membership_type': user_details.plan_id})
+	member_list = frappe.get_all("Member", filters={'email_id': user_details.email, 'membership_type': user_details.plan_id})
 	if member_list and member_list[0]:
-		return member_list[0]['name']
+		return frappe.get_doc("Member", member_list[0]['name'])
 	else:
 		return create_member(user_details)
 
@@ -134,7 +134,7 @@ def create_customer(user_details, member=None):
 
 	except Exception as e:
 		frappe.db.rollback(save_point="contact_creation")
-		frappe.log_error(frappe.get_traceback(), _("Contact Creation Failed"))
+		frappe.log_error(title=_("Contact Creation Failed"))
 		pass
 
 	return customer.name
@@ -174,7 +174,7 @@ def register_member(fullname, email, rzpay_plan_id, subscription_id, pan=None, m
 	if not plan:
 		raise frappe.DoesNotExistError
 
-	member = frappe.db.exists("Member", {'email': email, 'subscription_id': subscription_id })
+	member = frappe.db.exists("Member", {'email_id': email, 'subscription_id': subscription_id })
 	if member:
 		return member
 	else:

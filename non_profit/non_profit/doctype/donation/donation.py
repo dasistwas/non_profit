@@ -92,7 +92,7 @@ def capture_razorpay_donations(*args, **kwargs):
 	try:
 		verify_signature(data, endpoint='Donation')
 	except Exception as e:
-		log = frappe.log_error(e, 'Donation Webhook Verification Error')
+		log = frappe.log_error(title='Donation Webhook Verification Error')
 		notify_failure(log)
 		return { 'status': 'Failed', 'reason': e }
 
@@ -122,7 +122,9 @@ def capture_razorpay_donations(*args, **kwargs):
 
 	except Exception as e:
 		message = '{0}\n\n{1}\n\n{2}: {3}'.format(e, frappe.get_traceback(), _('Payment ID'), payment.id)
-		log = frappe.log_error(message, _('Error creating donation entry for {0}').format(donor.name))
+		log = frappe.log_error(
+			title=_('Error creating donation entry for {0}').format(donor.name), message=message
+		)
 		notify_failure(log)
 		return { 'status': 'Failed', 'reason': e }
 

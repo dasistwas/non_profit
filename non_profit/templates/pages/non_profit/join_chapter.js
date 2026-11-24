@@ -3,9 +3,8 @@
 
 frappe.ui.form.on('Chapter Member', {
 	onsubmit: function (frm) {
-		console.log("here" + frappe.session.user)
 		// body...
-	}
+	},
 	refresh: function(frm) {
 
 	}

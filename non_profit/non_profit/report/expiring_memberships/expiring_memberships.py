@@ -23,7 +23,7 @@ def get_data(filters):
 	filters["month"] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].index(filters.month) + 1
 
 	return frappe.db.sql("""
-		select ms.membership_type,ms.name,m.name,m.member_name,m.email,ms.max_membership_date
+		select ms.membership_type,ms.name,m.name,m.member_name,m.email_id,ms.max_membership_date
 		from `tabMember` m
 		inner join (select name,membership_type,max(to_date) as max_membership_date,member
 					from `tabMembership`
