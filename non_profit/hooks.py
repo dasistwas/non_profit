@@ -12,6 +12,20 @@ app_license = "GPL-3.0"
 
 required_apps = ["frappe/erpnext", "frappe/payments"]
 
+app_logo_url = "/assets/non_profit/images/non-profit-logo.svg"
+app_home = "/desk/non-profit"
+
+# Show Non Profit as an app on the desk's apps screen
+add_to_apps_screen = [
+	{
+		"name": app_name,
+		"logo": app_logo_url,
+		"title": app_title,
+		"route": app_home,
+		"has_permission": "non_profit.non_profit.utils.check_app_permission",
+	}
+]
+
 # Includes in <head>
 # ------------------
 
