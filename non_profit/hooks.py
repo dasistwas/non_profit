@@ -199,6 +199,6 @@ global_search_doctypes = {
 }
 
 standard_portal_menu_items = [
-	{"title": _("Certification"), "route": "/certification",
+	{"title": _("Certification"), "route": "/certification-application",
 	 "reference_doctype": "Certification Application", "role": "Non Profit Portal User"},
 ]
