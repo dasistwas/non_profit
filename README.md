@@ -10,10 +10,14 @@ People who change the world need the tools to do it! The Non Profit Modules of E
 
 Using bench, [install ERPNext](https://github.com/frappe/bench#installation) as mentioned here.
 
-Once ERPNext is installed, add non_profit app to your bench by running
+The `version-16` branch of this app is compatible with Frappe Framework v16 and ERPNext v16
+(Python 3.14, Node 24). It also requires the [Payments](https://github.com/frappe/payments) app.
+
+Once ERPNext is installed, add the payments and non_profit apps to your bench by running
 
 ```sh
-$ bench get-app non_profit
+$ bench get-app --branch version-16 payments
+$ bench get-app --branch version-16 non_profit
 ```
 
 After that, you can install non_profit app on required site by running
