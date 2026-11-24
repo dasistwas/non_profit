@@ -14,21 +14,17 @@ def make_custom_records():
 def setup_non_profit():
 	make_custom_records()
 	make_custom_fields()
+	activate_domain()
 
-	has_domain = frappe.get_doc({
-		'doctype': 'Has Domain',
-		'parent': 'Domain Settings',
-		'parentfield': 'active_domains',
-		'parenttype': 'Domain Settings',
-		'domain': 'Non Profit',
-	})
-	has_domain.save()
 
-	domain = frappe.get_doc('Domain', 'Non Profit')
-	domain.setup_domain()
+def activate_domain():
+	# The "Non Profit" Domain is created automatically when the doctypes
+	# restricted to it are synced; make sure it exists in any case.
+	if not frappe.db.exists("Domain", "Non Profit"):
+		frappe.get_doc({"doctype": "Domain", "domain": "Non Profit"}).insert(ignore_permissions=True)
 
-	domain_settings = frappe.get_single('Domain Settings')
-	domain_settings.append('active_domains', dict(domain=domain))
+	# appends to Domain Settings (if not already active), saves it and sets the domain up
+	frappe.get_single("Domain Settings").set_active_domains(["Non Profit"])
 	frappe.clear_cache()
 
 

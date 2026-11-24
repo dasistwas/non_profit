@@ -17,22 +17,27 @@ def get_company():
 def before_tests():
 	# complete setup if missing
 	from frappe.desk.page.setup_wizard.setup_wizard import setup_complete
+	from frappe.utils import getdate
+
 	if not frappe.get_list("Company"):
-		setup_complete({
-			"currency"          :"USD",
-			"full_name"         :"Test User",
-			"company_name"      :"Frappe Care LLC",
-			"timezone"          :"America/New_York",
-			"company_abbr"      :"WP",
-			"industry"          :"Healthcare",
-			"country"           :"United States",
-			"fy_start_date"     :"2021-01-01",
-			"fy_end_date"       :"2021-12-31",
-			"language"          :"english",
-			"company_tagline"   :"Testing",
-			"email"             :"test@erpnext.com",
-			"password"          :"test",
-			"chart_of_accounts" : "Standard",
-			"domains"           : ["Non Profit"],
-		})
-		setup_non_profit()
+		year = getdate().year
+		setup_complete(
+			{
+				"currency": "USD",
+				"full_name": "Test User",
+				"company_name": "Frappe Non Profit LLC",
+				"timezone": "America/New_York",
+				"company_abbr": "FNP",
+				"country": "United States",
+				"fy_start_date": f"{year}-01-01",
+				"fy_end_date": f"{year}-12-31",
+				"language": "english",
+				"company_tagline": "Testing",
+				"email": "test@erpnext.com",
+				"password": "test",
+				"chart_of_accounts": "Standard",
+			}
+		)
+
+	setup_non_profit()
+	frappe.db.commit()

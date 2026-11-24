@@ -1,16 +1,16 @@
 # Copyright (c) 2017, Frappe Technologies Pvt. Ltd. and Contributors
 # See license.txt
 
-import frappe
-from frappe.utils import add_months, nowdate
-from frappe.tests.utils import FrappeTestCase
-
 import erpnext
+import frappe
+from erpnext.tests.utils import ERPNextTestSuite
+from frappe.utils import add_months, nowdate
+
 from non_profit.non_profit.doctype.member.member import create_member
 from non_profit.non_profit.doctype.membership.membership import update_halted_razorpay_subscription
 
 
-class TestMembership(FrappeTestCase):
+class TestMembership(ERPNextTestSuite):
 	def setUp(self):
 		frappe.db.delete('Customer')
 		plan = setup_membership()
@@ -69,11 +69,8 @@ class TestMembership(FrappeTestCase):
 		update_halted_razorpay_subscription(data=payload)
 		self.assertEqual(frappe.db.get_value("Member", self.member, "subscription_status"), "Halted")
 
-	def tearDown(self):
-		frappe.db.rollback()
-
 def set_config(key, value):
-	frappe.db.set_value("Non Profit Settings", None, key, value)
+	frappe.db.set_single_value("Non Profit Settings", key, value)
 
 def make_membership(member, payload={}):
 	data = {

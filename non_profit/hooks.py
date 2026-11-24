@@ -8,9 +8,9 @@ app_description = "Non Profit"
 app_icon = "octicon octicon-file-directory"
 app_color = "grey"
 app_email = "pandikunta@frappe.io"
-app_license = "MIT"
+app_license = "GPL-3.0"
 
-required_apps = ["erpnext"]
+required_apps = ["frappe/erpnext", "frappe/payments"]
 
 # Includes in <head>
 # ------------------
@@ -35,9 +35,6 @@ required_apps = ["erpnext"]
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
-doctype_js = {
-	"Sales Invoice": "public/js/payment_entry.js"
-}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -98,11 +95,13 @@ after_install = "non_profit.setup.setup_non_profit"
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
-# DocType Class
-# ---------------
-# Override standard doctype classes
+# Extend DocType Class
+# ------------------------------
+# Mixins composed with the standard (or otherwise overridden) doctype controller.
+# Unlike `override_doctype_class`, this does not clash with other apps (e.g. HRMS)
+# that override the same doctype.
 
-override_doctype_class = {
+extend_doctype_class = {
 	"Payment Entry": "non_profit.non_profit.custom_doctype.payment_entry.NonProfitPaymentEntry",
 }
 

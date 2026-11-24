@@ -1,8 +1,8 @@
 # Copyright (c) 2017, Frappe Technologies Pvt. Ltd. and Contributors
 # See license.txt
 
-import unittest
+from frappe.tests import UnitTestCase
 
 
-class TestVolunteerType(unittest.TestCase):
+class TestVolunteerType(UnitTestCase):
 	pass

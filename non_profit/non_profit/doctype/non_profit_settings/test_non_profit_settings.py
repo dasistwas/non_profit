@@ -2,8 +2,8 @@
 # See license.txt
 
 # import frappe
-import unittest
+from frappe.tests import UnitTestCase
 
 
-class TestNonProfitSettings(unittest.TestCase):
+class TestNonProfitSettings(UnitTestCase):
 	pass

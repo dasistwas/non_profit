@@ -1,13 +1,12 @@
 # Copyright (c) 2021, Frappe Technologies Pvt. Ltd. and Contributors
 # See license.txt
-import unittest
-
 import frappe
+from erpnext.tests.utils import ERPNextTestSuite
 
 from non_profit.non_profit.doctype.donation.donation import create_razorpay_donation
 
 
-class TestDonation(unittest.TestCase):
+class TestDonation(ERPNextTestSuite):
 	def setUp(self):
 		create_donor_type()
 		settings = frappe.get_doc('Non Profit Settings')
