@@ -59,6 +59,7 @@ class Member(Document):
 	def make_customer_and_link(self):
 		if self.customer:
 			frappe.msgprint(_("A customer is already linked to this Member"))
+			return
 
 		customer = create_customer(frappe._dict({
 			'fullname': self.member_name,
@@ -97,11 +98,34 @@ def create_member(user_details):
 
 	return member
 
+def get_member_customer_group():
+	"""Customer Group for customers created for Members.
+
+	The one set in Non Profit Settings, else the Selling Settings default if that is not a group
+	node (ERPNext refuses group nodes for customers).
+	"""
+	customer_group = frappe.db.get_single_value("Non Profit Settings", "member_customer_group")
+	if customer_group:
+		return customer_group
+
+	customer_group = frappe.db.get_single_value("Selling Settings", "customer_group")
+	if customer_group and not frappe.db.get_value("Customer Group", customer_group, "is_group"):
+		return customer_group
+
+	frappe.throw(
+		_("Please set a {0} in {1}.").format(
+			frappe.bold(_("Default Customer Group for Members")),
+			get_link_to_form("Non Profit Settings", "Non Profit Settings"),
+		),
+		title=_("Customer Group Missing"),
+	)
+
+
 def create_customer(user_details, member=None):
 	customer = frappe.new_doc("Customer")
 	customer.customer_name = user_details.fullname
 	customer.customer_type = "Individual"
-	customer.customer_group = frappe.db.get_single_value("Selling Settings", "customer_group")
+	customer.customer_group = get_member_customer_group()
 	customer.territory = frappe.db.get_single_value("Selling Settings", "territory")
 	customer.flags.ignore_mandatory = True
 	customer.insert(ignore_permissions=True)

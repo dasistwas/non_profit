@@ -156,7 +156,7 @@ class Membership(Document):
 			"reference_name": self.name
 		}
 
-		if not frappe.flags.in_test:
+		if not frappe.in_test:
 			frappe.enqueue(method=frappe.sendmail, queue="short", timeout=300, is_async=True, **email_args)
 		else:
 			frappe.sendmail(**email_args)
@@ -298,7 +298,7 @@ def update_halted_razorpay_subscription(*args, **kwargs):
 	if frappe.request:
 		data = frappe.request.get_data(as_text=True)
 		data = process_request_data(data)
-	elif frappe.flags.in_test:
+	elif frappe.in_test:
 		data = kwargs.get("data")
 		data = frappe._dict(data)
 	else:

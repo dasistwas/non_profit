@@ -1,7 +1,6 @@
 # Copyright (c) 2017, Frappe Technologies Pvt. Ltd. and Contributors
 # See license.txt
 
-import erpnext
 import frappe
 from erpnext.tests.utils import ERPNextTestSuite
 from frappe.utils import add_months, nowdate
@@ -75,6 +74,7 @@ def set_config(key, value):
 def make_membership(member, payload={}):
 	data = {
 		"doctype": "Membership",
+		"company": TEST_COMPANY,
 		"member": member,
 		"membership_status": "Current",
 		"membership_type": "_rzpy_test_milythm",
@@ -102,9 +102,12 @@ def create_item(item_code):
 		item = frappe.get_doc("Item", item_code)
 	return item
 
+TEST_COMPANY = "_Test Company"
+
+
 def setup_membership():
-	# Get default company
-	company = frappe.get_doc("Company", erpnext.get_default_company())
+	# the ERPNext test bootstrap creates "_Test Company" but sets no default company
+	company = frappe.get_doc("Company", TEST_COMPANY)
 
 	# update non profit settings
 	settings = frappe.get_doc("Non Profit Settings")
@@ -119,6 +122,7 @@ def setup_membership():
 	settings.donation_company = company.name
 	settings.membership_payment_account = company.default_cash_account
 	settings.membership_debit_account = company.default_receivable_account
+	settings.member_customer_group = "_Test Customer Group"
 	settings.flags.ignore_mandatory = True
 	settings.save()
 

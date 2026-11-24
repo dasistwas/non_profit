@@ -5,6 +5,9 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "members_section",
+  "member_customer_group",
+  "memberships_section",
   "enable_razorpay_for_memberships",
   "razorpay_settings_section",
   "billing_cycle",
@@ -35,6 +38,23 @@
   "creation_user"
  ],
  "fields": [
+  {
+   "fieldname": "members_section",
+   "fieldtype": "Section Break",
+   "label": "Members"
+  },
+  {
+   "description": "Customer Group used when a Customer is created for a Member (e.g. with the \"Create Customer\" button). Must not be a group node. If empty, the default Customer Group from Selling Settings is used.",
+   "fieldname": "member_customer_group",
+   "fieldtype": "Link",
+   "label": "Default Customer Group for Members",
+   "options": "Customer Group"
+  },
+  {
+   "fieldname": "memberships_section",
+   "fieldtype": "Section Break",
+   "label": "Memberships"
+  },
   {
    "fieldname": "billing_cycle",
    "fieldtype": "Select",
@@ -232,7 +252,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2021-03-11 10:43:38.124240",
+ "modified": "2026-11-24 21:00:00.000000",
  "modified_by": "Administrator",
  "module": "Non Profit",
  "name": "Non Profit Settings",

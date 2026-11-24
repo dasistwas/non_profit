@@ -3,6 +3,14 @@
 
 frappe.ui.form.on("Non Profit Settings", {
 	refresh: function(frm) {
+		frm.set_query("member_customer_group", function() {
+			return {
+				filters: {
+					"is_group": 0
+				}
+			};
+		});
+
 		frm.set_query("inv_print_format", function() {
 			return {
 				filters: {
